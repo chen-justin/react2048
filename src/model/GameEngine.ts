@@ -56,6 +56,7 @@ class GameEngine {
 
   down() {
     this.transposeBoard();
+    this.reverseBoard();
     let collapse = this.collapseBoard(this.state);
     if (collapse) {
       this.state = collapse;
@@ -77,7 +78,8 @@ class GameEngine {
   }
 
   getTileState() {
-    return this.state.filter((x) => x.getValue() > 0);
+    // return this.state.filter((x) => x.getValue() > 0);
+    return this.state;
   }
 
   private tilesAvailable() {
@@ -120,8 +122,12 @@ class GameEngine {
         let mergedWith = noZeroArr[i + 1];
 
         // @TODO: Could probably separate this logic into the Tile class.
-        curr.setMergedId(mergedWith.getId());
-        mergedWith.setId(mergedWith.getId() + 1);
+        curr.setMergedTile(mergedWith);
+        console.log(curr);
+        console.log(mergedWith);
+        // mergedWith.setId(mergedWith.getId());
+        mergedWith.toBeDeleted = true;
+        mergedWith.setMergedTile(curr);
         curr.setValue(curr.getValue() + 1);
         this.gameScore += Math.floor(Math.pow(2, curr.getValue()));
         ret.push(curr);
@@ -178,11 +184,11 @@ class GameEngine {
   private reverseBoard() {
     let i = 0;
     const boardSize = this.boardSize;
-    while (i < boardSize) {
-      let j = i * boardSize;
-      let k = j + boardSize - 1;
+    while (i < boardSize) { //Row by row
+      let j = i * boardSize; //Start from left end of the row
+      let k = j + boardSize - 1; //Also grab the right end of the row
       while (j < k) {
-        let temp = this.state[i];
+        let temp = this.state[j];
         this.state[j] = this.state[k];
         this.state[k] = temp;
         Tile.swapPos(this.state[j], this.state[k]);

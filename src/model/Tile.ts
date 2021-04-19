@@ -4,6 +4,8 @@ class Tile {
   private value: number;
   private row: number;
   private col: number;
+  public toBeDeleted: boolean | null;
+  private mergedTile?: Tile | null;
 
   private static tileSerial = 0;
 
@@ -15,6 +17,7 @@ class Tile {
     if (incId) {
       Tile.tileSerial += 1;
     }
+    this.toBeDeleted = false;
   }
 
   // Getters/Setters
@@ -52,6 +55,24 @@ class Tile {
 
   getCol(): number {
     return this.col;
+  }
+
+  setMergedTile(tile: Tile) {
+    this.mergedTile = tile;
+  }
+
+  getMergedTile(): Tile | null {
+    return this.mergedTile ? this.mergedTile : null;
+  }
+
+  popMergedTile(): Tile | null {
+    if (this.mergedTile) {
+      let temp = this.mergedTile;
+      this.mergedTile = null;
+      return temp;
+    } else {
+      return null;
+    }
   }
 
   setCol(value: number): Tile {

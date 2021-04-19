@@ -1,0 +1,11 @@
+.tiles-container {
+  width: 500px;
+  height: 500px;
+  background: #bbada0;
+  gap: 16px;
+}
+
+
+.game-container {
+  display: flex;
+}
